@@ -27,7 +27,7 @@ node[:deploy].each do |application, deploy|
     end
     mounted_at deploy[:mounted_at]
     ssl_certificate_ca deploy[:ssl_certificate_ca]
-    if application == 'root' || node['opsworks_java']['tomcat']['use_root_bind'] = true
+    if application == 'root' || node['opsworks_java']['tomcat']['use_root_bind']
       target_context ''
     else
       target_context "#{application}/"
