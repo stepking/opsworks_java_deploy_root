@@ -104,6 +104,8 @@ node[:deploy].each do |application, deploy|
   default[:deploy][application][:ssl_support] = false
   default[:deploy][application][:auto_npm_install_on_deploy] = true
 
+  default[:deploy][application][:use_tomcat_root_dir] = false
+
   # nodejs
   default[:deploy][application][:nodejs][:restart_command] = "monit restart node_web_app_#{application}"
   default[:deploy][application][:nodejs][:stop_command] = "monit stop node_web_app_#{application}"
