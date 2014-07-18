@@ -7,7 +7,7 @@ node[:deploy].each do |application, deploy|
   end
 
   # ROOT has a special meaning and has to be capitalized
-  if application == 'root'|| node['opsworks_java']['tomcat']['use_root_bind']
+  if application == 'root'|| deploy[:use_tomcat_root_dir]
     webapp_name = 'ROOT'
   else
     webapp_name = application
@@ -25,3 +25,4 @@ node[:deploy].each do |application, deploy|
     notifies :restart, "service[#{node['opsworks_java']['java_app_server']}]"
   end
 end
+

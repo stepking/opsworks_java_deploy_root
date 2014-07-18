@@ -1,4 +1,4 @@
-# Copyright 2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+i# Copyright 2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You may not
 # use this file except in compliance with the License. A copy of the License is
@@ -27,25 +27,12 @@ node[:deploy].each do |application, deploy|
     end
     mounted_at deploy[:mounted_at]
     ssl_certificate_ca deploy[:ssl_certificate_ca]
-    if application == 'root' || node['opsworks_java']['tomcat']['use_root_bind']
+    if application == 'root' || deploy[:use_tomcat_root_dir]
       target_context ''
     else
       target_context "#{application}/"
     end
   end
-
-  #add support for non-root named apps to be ROOT
-  if node['opsworks_java']['tomcat']['use_root_bind']
-    root_webapp_dir = ::File.join(node['opsworks_java'][node['opsworks_java']['java_app_server']]['webapps_base_dir'], "ROOT")
-    app_current = ::::File.join(deploy[:deploy_to], 'current')
-   
-    link webapp_dir do
-      to app_current
-      action :create
-    end
-  end
-    
-     
 
   template "#{node[:apache][:dir]}/ssl/#{deploy[:domains].first}.crt" do
     mode 0600
@@ -97,4 +84,5 @@ node[:deploy].each do |application, deploy|
 end
 
 include_recipe 'opsworks_java::context'
+
 
