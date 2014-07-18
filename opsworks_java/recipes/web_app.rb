@@ -34,6 +34,19 @@ node[:deploy].each do |application, deploy|
     end
   end
 
+  #add support for non-root named apps to be ROOT
+  if node['opsworks_java']['tomcat']['use_root_bind']
+    root_webapp_dir = ::File.join(node['opsworks_java'][node['opsworks_java']['java_app_server']]['webapps_base_dir'], "ROOT")
+    app_current = ::::File.join(deploy[:deploy_to], 'current')
+   
+    link webapp_dir do
+      to app_current
+      action :create
+    end
+  end
+    
+     
+
   template "#{node[:apache][:dir]}/ssl/#{deploy[:domains].first}.crt" do
     mode 0600
     source 'ssl.key.erb'
